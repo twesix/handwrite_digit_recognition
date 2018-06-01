@@ -22,8 +22,8 @@ def root():
         resp = make_response(response_text)
 
     if request.method == 'GET':
-        with open('index.html') as f:
-            index_page = f.read().encode('utf-8')
+        with open('index.html', encoding='utf-8') as f:
+            index_page = f.read()
         resp = make_response(index_page)
 
     resp.headers['access-control-allow-origin'] = '*'
