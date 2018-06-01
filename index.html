@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<h1 id="digit"></h1>
+<script>
+    $.ajax
+    (
+        {
+            url: 'http://localhost:5000',
+            type: 'POST',
+            success: function(text, status, xhr)
+            {
+                console.log(text)
+            },
+            contentType: 'application/json',
+            data: {key: 'what the fuck is this shit'}
+        }
+    )
+</script>
+</body>
+</html>
