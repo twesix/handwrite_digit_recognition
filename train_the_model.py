@@ -28,9 +28,16 @@ print('X train shape: ', X_train.shape)
 print(X_train.shape[0], ' train samples')
 print(X_test.shape[0], ' test samples')
 
+print(X_train[0])
+print(y_train[0])
+
 num_category = 10
 y_train = keras.utils.to_categorical(y_train, num_category)
 y_test = keras.utils.to_categorical(y_test, num_category)
+
+print(y_train[0])
+
+exit()
 
 model = Sequential()
 model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
@@ -63,10 +70,5 @@ score = model.evaluate(X_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
-exit()
-
-model_digit_json = model.to_json()
-with open('model_digit.json', 'w') as json_file:
-    json_file.write(model_digit_json)
-model.save_weights('model_digit.h5')
+model.save('trained_model.h5')
 print('Saved model to disk')
