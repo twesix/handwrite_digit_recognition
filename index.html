@@ -2,26 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0">
     <title>Test</title>
 
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="static/jquery.min.js"></script>
+    <style>
+        html,
+        body
+        {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            margin: 0;
+            /*overflow: hidden;*/
+            box-sizing: border-box;
+        }
+        button
+        {
+            font-size: 18px;
+            padding: 8px;
+            margin: 20px;
+        }
+        canvas
+        {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
+<canvas width="480" height="480" id="canvas"></canvas>
 <h1 id="digit"></h1>
+<br>
+<button id="reset">清除</button>
+<button id="recognize">识别</button>
+
 <script>
-    $.ajax
-    (
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+    console.log(ctx)
+    const recognize = function()
+    {
+        const url = 'http://localhost:5000'
+        const data = {array: [[1,2,3,4], [1,2,3,4], [1,2,3,4], [1,2,3,4]]}
+        const success = function(text)
         {
-            url: 'http://localhost:5000',
-            type: 'POST',
-            success: function(text, status, xhr)
-            {
-                console.log(text)
-            },
-            contentType: 'application/json',
-            data: {key: 'what the fuck is this shit'}
+            console.log(text)
+            $("#digit").text(text)
         }
-    )
+        $.post(url, JSON.stringify(data), success)
+    }
+    const clear = function()
+    {
+        console.log('clear the canvas...done')
+    }
+    $("#clear").click(clear)
+    $("#recognize").click(recognize)
 </script>
 </body>
 </html>
