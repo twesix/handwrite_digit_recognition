@@ -43,7 +43,7 @@
     const ctx = canvas.getContext('2d')
     const setContext = function()
     {
-        ctx.lineWidth = 10
+        ctx.lineWidth = 20
         ctx.strokeStyle = 'black'
         ctx.lineCap = 'round'
         ctx.lineJoin = 'round'
@@ -146,18 +146,64 @@
     function canvasToArray()
     {
         const imageData = ctx.getImageData(0, 0, 280, 280).data
-        for (let x = 0; x < 28; x ++)
+        const pixelArray = []
+        for (let x = 0; x < 280; x ++)
         {
-            for (let y = 0; y < 28; y++)
+            for (let y = 0; y < 280; y ++)
             {
-                const index = x * 28 * 4 + y * 4
+                const index = x * 280 * 4 + y * 4
                 if (imageData[index] + imageData[index + 1] + imageData[index + 2] + imageData[index + 3] > 0)
                 {
-                    
+                    pixelArray.push(1)
+                }
+                else
+                {
+                    pixelArray.push(0)
                 }
             }
         }
-        console.log(imageData)
+        // console.log(pixelArray)
+
+        const pixelMatrix = []
+        for (let x = 0; x < 280; x ++)
+        {
+            const row = []
+            for (let y = 0; y < 280; y ++)
+            {
+                const index = x * 280 + y
+                row.push(pixelArray[index])
+            }
+            pixelMatrix.push(row)
+        }
+        // console.log(pixelMatrix)
+
+        const result = []
+        for (let x = 0; x < 28; x ++)
+        {
+            for (let y = 0; y < 28; y ++)
+            {
+                let pixelCount = 0
+                for (let x1 = 0; x1 < 10; x1 ++)
+                {
+                    for (let y1 = 0; y1 < 10; y1 ++)
+                    {
+                        const row = x * 10 + x1
+                        const col = y * 10 + y1
+                        if (pixelMatrix[row][col] === 1)
+                        {
+                            // console.log(row, col)
+                            pixelCount ++
+                        }
+                    }
+                }
+                if (pixelCount > 0)
+                {
+                    // console.log(x, y, pixelCount / 100)
+                    result.push([x, y, pixelCount / 100])
+                }
+            }
+        }
+        console.log(result)
     }
     const recognize = function()
     {
