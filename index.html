@@ -143,8 +143,25 @@
     forRetina()
     setContext()
 
+    function canvasToArray()
+    {
+        const imageData = ctx.getImageData(0, 0, 280, 280).data
+        for (let x = 0; x < 28; x ++)
+        {
+            for (let y = 0; y < 28; y++)
+            {
+                const index = x * 28 * 4 + y * 4
+                if (imageData[index] + imageData[index + 1] + imageData[index + 2] + imageData[index + 3] > 0)
+                {
+                    
+                }
+            }
+        }
+        console.log(imageData)
+    }
     const recognize = function()
     {
+        canvasToArray()
         console.log('sending data to server to recognize the digit...')
         const url = 'http://localhost:5000'
         const data = {array: [[1,2,3,4], [1,2,3,4], [1,2,3,4], [1,2,3,4]]}
@@ -153,7 +170,7 @@
             console.log(text)
             $("#digit").text(text)
         }
-        $.post(url, JSON.stringify(data), success)
+        // $.post(url, JSON.stringify(data), success)
     }
     const clear = function()
     {
