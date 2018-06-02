@@ -16,6 +16,7 @@
             margin: 0;
             /*overflow: hidden;*/
             box-sizing: border-box;
+            text-align: center;
         }
         button
         {
@@ -30,18 +31,121 @@
     </style>
 </head>
 <body>
-<canvas width="480" height="480" id="canvas"></canvas>
+<canvas width="280" height="280" id="canvas"></canvas>
 <h1>识别结果：<span id="digit">无</span></h1>
 <br>
-<button id="reset">清除</button>
+<button id="clear">清除</button>
 <button id="recognize">识别</button>
 
 <script>
+    const point = {}
     const canvas = document.getElementById('canvas')
     const ctx = canvas.getContext('2d')
-    console.log(ctx)
+    const setContext = function()
+    {
+        ctx.lineWidth = 10
+        ctx.strokeStyle = 'black'
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+        ctx.shadowBlur = 1
+        ctx.shadowColor = 'grey'
+    }
+    const left = canvas.getBoundingClientRect().left
+    const up = canvas.getBoundingClientRect().top
+
+    const isMobile = /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i.test(navigator.userAgent);
+
+    const paint = function(signal)
+    {
+        switch(signal)
+        {
+            case 'start':
+            {
+                ctx.beginPath()
+                ctx.moveTo(point.x, point.y)
+                ctx.lineTo(point.x, point.y)
+                ctx.stroke()
+                break
+            }
+            case 'move':
+            {
+                ctx.lineTo(point.x, point.y)
+                ctx.stroke()
+                break
+            }
+        }
+    }
+
+    let pressed = false
+    const start = function(e)
+    {
+        e.preventDefault()
+        pressed = true
+        e = isMobile ? e.touches[0] : e
+        point.x = e.clientX - left + 0.5
+        point.y = e.clientY - up + 0.5
+        paint('start')
+    }
+    const move = function(e)
+    {
+        e.preventDefault()
+        if (!pressed)
+        {
+            return
+        }
+        requestAnimationFrame(function()
+        {
+            e = isMobile ? e.touches[0] : e
+            point.x = e.clientX - left + 0.5
+            point.y = e.clientY - up + 0.5
+            paint('move')
+        })
+    }
+
+    if (isMobile)
+    {
+        canvas.addEventListener('touchstart', start)
+        canvas.addEventListener('touchmove', move)
+    }
+    else
+    {
+        canvas.addEventListener('mousedown', start)
+        canvas.addEventListener('mousemove', move)
+        ;['mouseup', 'mouseleave'].forEach(function(e)
+        {
+            canvas.addEventListener(e, function()
+            {
+                pressed = false
+            })
+        })
+    }
+
+    const forRetina = function()
+    {
+        let { width, height } = window.getComputedStyle(canvas, null)
+        width = width.replace('px', '')
+        height = height.replace('px', '')
+        const devicePixelRatio = window.devicePixelRatio;
+        if (devicePixelRatio)
+        {
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            canvas.height = height * devicePixelRatio; // 画布宽高放大
+            canvas.width = width * devicePixelRatio;
+            ctx.scale(devicePixelRatio, devicePixelRatio); // 画布内容放大相同的倍数
+        }
+        else
+        {
+            canvas.width = width;
+            canvas.height = height;
+        }
+    }
+    forRetina()
+    setContext()
+
     const recognize = function()
     {
+        console.log('sending data to server to recognize the digit...')
         const url = 'http://localhost:5000'
         const data = {array: [[1,2,3,4], [1,2,3,4], [1,2,3,4], [1,2,3,4]]}
         const success = function(text)
@@ -54,6 +158,7 @@
     const clear = function()
     {
         console.log('clear the canvas...done')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
     $("#clear").click(clear)
     $("#recognize").click(recognize)
