@@ -203,20 +203,21 @@
                 }
             }
         }
-        console.log(result)
+        // console.log(result)
+        return result
     }
     const recognize = function()
     {
         canvasToArray()
         console.log('sending data to server to recognize the digit...')
         const url = 'http://localhost:5000'
-        const data = {array: [[1,2,3,4], [1,2,3,4], [1,2,3,4], [1,2,3,4]]}
+        const data = canvasToArray()
         const success = function(text)
         {
             console.log(text)
             $("#digit").text(text)
         }
-        // $.post(url, JSON.stringify(data), success)
+        $.post(url, JSON.stringify(data), success)
     }
     const clear = function()
     {
