@@ -2,16 +2,24 @@ import numpy as np
 import struct
 import matplotlib.pyplot as plt
 import os
+path = os.path
+
+abs_dir_path = path.abspath(path.dirname(__file__))
+print('mnist data dir: ' + abs_dir_path)
 
 # 训练集文件
-train_images_idx3_ubyte_file = 'mnist_data' + os.path.sep + 'train-images.idx3-ubyte'
+train_images_idx3_ubyte_file = path.abspath(path.join(abs_dir_path, 'train-images.idx3-ubyte'))
+print('train images: ' + train_images_idx3_ubyte_file)
 # 训练集标签文件
-train_labels_idx1_ubyte_file = 'mnist_data' + os.path.sep + 'train-labels.idx1-ubyte'
+train_labels_idx1_ubyte_file = path.abspath(path.join(abs_dir_path, 'train-labels.idx1-ubyte'))
+print('train labels: ' + train_labels_idx1_ubyte_file)
 
 # 测试集文件
-test_images_idx3_ubyte_file = 'mnist_data' + os.path.sep + 't10k-images.idx3-ubyte'
+test_images_idx3_ubyte_file = path.abspath(path.join(abs_dir_path, 't10k-images.idx3-ubyte'))
+print('test images: ' + test_images_idx3_ubyte_file)
 # 测试集标签文件
-test_labels_idx1_ubyte_file = 'mnist_data' + os.path.sep + 't10k-labels.idx1-ubyte'
+test_labels_idx1_ubyte_file = path.abspath(path.join(abs_dir_path, 't10k-labels.idx1-ubyte'))
+print('test labels: ' + test_labels_idx1_ubyte_file)
 
 
 def decode_idx3_ubyte(file_path):
