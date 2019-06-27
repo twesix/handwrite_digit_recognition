@@ -2,7 +2,7 @@ from flask import Flask
 from flask import request, make_response
 import os
 import json
-from model import recognize
+from keras.model import recognize
 
 os.environ['FLASK_DEBUG'] = str(1)
 
